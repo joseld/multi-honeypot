@@ -1,0 +1,23 @@
+{
+  "name": "multi-honeypot",
+  "version": "1.0.0",
+  "description": "A multi-honeypot to simulate IoT devices",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "request": "^2.87.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joseld/multi-honeypot"
+  },
+  "keywords": [
+    "node",
+    "honeypot",
+    "IoT"
+  ],
+  "author": "Jose Luis Diaz Diaz",
+  "license": "MIT"
+}
