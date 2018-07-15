@@ -1,0 +1,227 @@
+
+<html>
+<head>
+<title>Login to SDT-CS3B1</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Expires" CONTENT="-1">
+
+<meta http-equiv="expires" content="-1">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+
+
+<link rel='stylesheet' type='text/css' href='./css/login.css' />
+<script language="javascript" type="text/javascript" src="./js/ajaxbasic.js"></script>
+<script type="text/javascript" src="./js/langsel.js"></script>
+<script language="javascript" type="text/javascript" src="../js/network-check.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+  LangInitialize();     
+</script>
+
+<script language="JavaScript" type="text/javascript">
+var lang_sel;
+var login_status;
+var default_gw = "192.168.50.1";
+var webip; // 20150106 hj EC
+var webtype;
+
+function LangGet()
+{
+  var url = "./cgi-bin/systemutil.cgi?Command=LangGet";
+  XHRGet(LangGetHandle, url, false);  //false ==>Syn. Call
+}
+
+function LangGetHandle(xmlDoc)
+{
+    if (hasError(xmlDoc))
+  {
+    showError(xmlDoc);
+    return;
+  }
+  lang_sel = getDataFromTag(xmlDoc, "LangCode");
+  
+  LangMapSelect(lang_sel);
+}
+
+
+function LoginCheck()
+{
+  var url = "./cgi-bin/systemutil.cgi?Command=LoginStatus";
+  XHRGet(LoginCheckHandle, url, false);  //false ==>Syn. Call
+}
+
+function LoginCheckHandle(xmlDoc)
+{
+  if (hasError(xmlDoc))
+  {
+    showError(xmlDoc);
+    return;
+  }
+  var status = getDataFromTag(xmlDoc, "LoginStatus");
+  login_status = status *1;
+}
+  
+function page_login_Submit()
+{
+    var frm = document.login;
+  
+  if((frm.login_id.value.length == 0) || (frm.login_pass.value.length == 0))
+  {
+    alert(_LangConvert("Please Check user id or password !"));
+    return false;
+  }
+    var param = "Command=Login"
+      + "&"
+      + "user="+frm.login_id.value
+      + "&"
+      + "password="+frm.login_pass.value;
+    
+    XHRPost(LoginHandle, "./cgi-bin/systemutil.cgi", param, true);  
+}
+
+function LoginHandle(xmlDoc)
+{
+    var result;
+  if (hasError(xmlDoc))
+  {
+    showError(xmlDoc);
+    return;
+  }
+  result = getDataFromTag(xmlDoc, "Login");
+  login_status = result *1;
+  if( login_status == 1 || login_status == 2 || login_status == 3 || login_status == 4 )  // User=>1 Admin=>2 , IOT=>3, HIDDEN=>4
+  {
+      // 20140929 patch
+    //window.location="/index.html";
+//20150106 hj EC_S    
+    //window.location.href="http://"+default_gw+"/index.html";
+    window.location.href=webtype+"//"+webip+"/index.html";
+//20150106 hj EC_E
+  }
+  else
+  {
+      alert(_LangConvert("login Fail !"));
+    initialize();
+  }
+}
+
+
+function onInit()
+{
+  var frm = document.login;
+  window.scrollTo(0,0);
+  
+  LangGet();
+  
+  document.getElementById("LoginWelcom").innerHTML =  "<img src='./images/icons_title.gif' align='' />" + _LangConvert("Please Input User ID and Password");
+  
+  document.getElementById("LoginID").innerHTML = _LangConvert("User ID");
+  document.getElementById("LoginPass").innerHTML = _LangConvert("Password");
+  document.getElementById("LoginOK").value = _LangConvert("Login");
+  LoginCheck();
+  GetWebip(); //20150106 hj EC
+  if( login_status == 1 || login_status == 2)  // User=>1 Admin=>2
+  {
+    // 20140929 patch
+    //window.location="/index.html";
+//20150106 hj EC_S  
+    //window.location.href="http://"+default_gw+"/index.html";
+    window.location.href=webtype+"//"+webip+"/index.html";
+//20150106 hj EC_E
+  }
+  else
+  {
+      initialize();
+  }
+}
+
+function initialize()
+{
+  window.document.login.login_id.focus();
+}
+
+function enterCheck(e) 
+{
+  if(e.keyCode == 13)
+  {
+    page_login_Submit();
+    return false;
+  } 
+  else 
+  {
+    return true;
+  }
+}
+
+//20150106 hj EC_S
+function GetWebip()
+{
+  var first_login = "0";
+  var web_url = location.href;
+  var tmp = web_url.split('/');
+// 20150824 hj EC_S 
+/*
+  if ( tmp[2].indexOf(":") != -1)
+  {
+    var tmp_ip = tmp[2].split(':');
+    if ( check_input(tmp_ip[0],"ip") == true )
+      webip = tmp[2];
+  }
+  else
+  {
+    if (check_input(tmp[2], "ip") == false)
+      webip = default_gw;
+    else  
+      webip = tmp[2];
+  }
+*/
+  webip = tmp[2];
+  webtype = tmp[0];
+// 20150824 hj EC_E
+}
+//20150106 hj EC_E
+
+</script> 
+</head>
+<body onload="onInit()"  >
+<br>
+<br>
+<br>
+<br>
+<br>
+    <table cellpadding="2px" cellspacing="1px" width="400px" align="center">
+      <tr>
+        <td align="center" colspan="2">
+          <img src="images/login_logo.png" border="0" align="absbottom"/>&nbsp;
+        </td>
+      </tr>                   
+    </table>
+<br>
+<br>
+<br>
+  <div id='container'> 
+    <div id='content_con'>
+      <div class='title_tx' id='LoginWelcom' align='center'></div>
+      <form name="login">
+        <table id="login_table" border='0' align='center' cellpadding='0' cellspacing='0' style='width:700px ;border-top:2px solid #DDDDDD; border-bottom:1px solid #DDDDDD;'>
+          <tr>
+            <th style='border-bottom:1px solid #DDDDDD; padding:9px 30px 7px 0; text-align:right; width:40%%;' id="LoginID"></th>
+            <td style='border-bottom:1px solid #DDDDDD; padding:0 0 0 10px; text-align:left; width:60%%;'>
+              <input name='login_id' id='login_id' type='text' class='txfield' value="" />
+            </td>
+          </tr>
+          <tr>
+            <th style='padding:9px 30px 7px 0; text-align:right;' id="LoginPass"></th>
+            <td style='padding:0 0 0 10px; text-align:left;'>
+              <input name='login_pass' maxlength="20" id='login_pass' type='password' class='txfield' onkeypress="return enterCheck(event);" />
+            </td>
+          </tr>
+        </table>
+        <div class='btn_apply'><input type='button' id="LoginOK" value='login' onclick='page_login_Submit()' />
+      </form>
+    </div>
+  </div>
+</body>
+</html>

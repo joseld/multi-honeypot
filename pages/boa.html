@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+<meta name="renderer" content="webkit">
+<title>WEB configuration</title>
+<link href="css/nmn_common.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+body{
+	background:url(images/bj.jpg);
+	padding-top:13%;
+	text-align:center;
+	overflow:auto;
+}
+#res_ukey_id,#res_logintype_id,#res_usr_id,#res_pwd_id,#res_lang_id{
+	font-size:14.8px;
+	font-weight:bold;
+	color:#000099;
+	text-align:right
+}
+.ukey,.logintype,.usr,.pwd,.lang{
+	height:24px;
+	width:150px;
+	margin-left:42px
+}
+#res_copy_id{
+	color:#0066CC;
+	margin-left:48px
+}
+.login{
+	margin-left:42px;
+	background:url(../images/button.gif) 0px 0px;
+	border:1px solid #7AADC8;
+	height:22px;
+	font-weight:bold;
+	cursor:pointer;
+	padding-top:0px !important;
+	padding-top:2px;
+	padding-left:3px;
+	padding-right:1px;
+	letter-spacing:3px;
+	text-indent:3px;
+	*text-indent:0;
+	text-align:center
+}
+.bl{
+	font-size:15px;
+	line-heght:15px;
+	height:15px;
+}
+</style>
+<script language="javascript" src="javascript/nmn_common.js"></script>
+<script language="javascript" src="javascript/index.js"></script>
+<noscript><ifram src="*.htm"></iframe></noscript>
+<script language="javascript">
+var IF;
+var mycopy=""
+var myi18n="";
+onload=init;
+function init()
+{
+	IF=document.iform;
+	IF.USERNAME.focus();
+	if(myi18n) i18n=myi18n;
+	for(var i in res){
+		if(res[i].lang){
+			var op=document.createElement("option");
+			op.value=i;
+			op.text=res[i].lang;
+			try{IF.LANG.add(op);}catch(e){IF.LANG.add(op,null)}
+		}
+		//if(mycopy){
+			if("" == "1"){
+				res[i].copy=res[i].copy3;
+				res[i].title=res[i].title3;
+			}else{
+				res[i].copy=res[i].copy2;
+				res[i].title=res[i].title2;
+			}
+		//}
+	}
+	for(var i=0;i<IF.LANG.options.length;i++){
+		if(IF.LANG.options[i].value==i18n){
+			IF.LANG.options[i].selected=true;
+			setRes(i18n);
+			break;
+		}
+	}
+	if("" || "")
+		alert(res[i18n].err3);
+
+	document.oncontextmenu=new Function("event.returnValue=false;");
+	document.onselectstart=new Function("event.returnValue=false;");
+	//GID("login_nor").href="#";
+	//GID("login_nor").style.cssText="color:gray;cusor:default;";
+}
+
+function setRes(lang)
+{
+		document.getElementById("res_usr_id").innerHTML=res[lang].usr;
+		document.getElementById("res_pwd_id").innerHTML=res[lang].pwd;
+		document.getElementById("res_lang_id").innerHTML=res[lang].language;
+		document.getElementById("res_copy_id").innerHTML=res[lang].copy;
+		//document.getElementById("res_logintype_id").innerHTML=res[lang].logintype;
+		//document.getElementById("login_ukey").innerHTML=res[lang].ukey;
+		//document.getElementById("login_nor").innerHTML=res[lang].normal;
+		document.title=res[lang].title;
+		IF.LOGIN.value=res[lang].login;
+		i18n=lang;
+		IF.LANGUAGE.value=lang;
+		IF.WEB_TITLE.value=res[lang].title;
+		//GID("login_ukey").href="index_ukey.htm?LANGUAGE="+i18n;
+}
+
+function chkInput(e,evt)
+{
+	evt = evt || event;
+	var kCode="";
+	kCode= evt.keyCode ? evt.keyCode : evt.charCode;
+	if(kCode==13){
+		return checkForm();
+	}else if(kCode==39||kCode==37 || kCode==8 || kCode==9 || kCode==46){
+		return true;
+	}
+
+	var reg_tmp = /[^\w\d\.\_\@]/g;
+
+	if(!reg_tmp.test(e.value))
+		return 1;
+	e.value=e.value.replace(reg_tmp,"");
+}
+
+function checkForm(){
+	var reg=/^[\w\d\_\.\@]*$/;
+
+	var user=IF.USERNAME.value;
+	if(!user){
+		alert(res[i18n].err1);
+		IF.USERNAME.focus();
+		return 0;
+	}
+	var pwd=IF.PASSWORD.value;
+	if(!pwd){
+		alert(res[i18n].err2);
+		IF.PASSWORD.focus();
+		return 0;
+	}
+	if(!reg.test(user) || !reg.test(pwd)){
+		alert(res[i18n].err3);
+		return 0;
+	}
+	IF.submit();
+}
+</script>
+</head>
+<body>
+<form name="iform" method="post" action="index.htm">
+<table style="width:646px;margin-left:auto;margin-right:auto">
+	<tr>
+		<td background="images/d01.jpg" style="line-height:18px">&nbsp;</td>
+	</tr>
+	<tr>
+		<td height="110"><img src="images/d02.jpg" width="646" height="110" /></td>
+	</tr>
+	<tr>
+		<td height="289" valign="top" background="images/d03.jpg">
+<table width="100%">
+	<tr>
+		<td width="260" height="40">&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td id="res_usr_id">User name</td>
+		<td>
+			<input type="text" name="USERNAME" value="" maxlength="32" class="usr" onblur="chkInput(this)" />
+		</td>
+	</tr>
+	<tr>
+		<td class="bl"> </td>
+		<td> </td>
+	</tr>
+	<tr>
+		<td id="res_pwd_id">Password</td>
+		<td>
+			<input type="password" name="PASSWORD" maxlength="32" class="pwd"
+			onkeyup="chkInput(this,event)" onblur="chkInput(this)" />
+		</td>
+	</tr>
+	<tr>
+		<td class="bl"> </td>
+		<td> </td>
+	</tr>
+	<tr>
+		<td id="res_lang_id">Language</td>
+		<td>
+			<select name="LANG" class="lang" onchange="setRes(this.value)"></select>
+		</td>
+	</tr>
+	<tr>
+		<td class="bl"> </td>
+		<td></td>
+	</tr>
+	<tr>
+		<td> </td>
+		<td>
+			<input type="button" value="Login" name="LOGIN" onclick="checkForm()" class="login" />
+			<input type="hidden" value="en_us" name="LANGUAGE" />
+			<input type="hidden" value="Web Configuration" name="WEB_TITLE" />
+		</td>
+	</tr>
+</table>
+<table width="100%">
+	<tr>
+		<td style="color:red;height:60px;padding-left:48px">
+			&nbsp;
+			<noscript>The browser forbids running scripts, so you cannot log in successfully. Please permit running scripts and log in again!</noscript>
+		</td>
+	</tr>
+</table>
+<table width="100%">
+	<tr>
+		<td><span id="res_copy_id">Netmoon Technology Development Co., Ltd &copy; All rights reserved</span></td>
+	</tr>
+</table>
+</form>
+		</td>
+	</tr>
+</table>
+</body>
+</html>
