@@ -26,7 +26,7 @@ function handle_BOA_Webcam(req, res) {
     res.setHeader('Content-Length', '14221');
     res.setHeader('Last-Modified', 'Thu, 12 Jul 2018 23:03:46 GMT');
     
-    var content = fs.readFileSync('boa.html', 'utf8');
+    var content = fs.readFileSync('pages/boa.html', 'utf8');
     res.statusCode = 200;
     res.end(content);
 }
@@ -36,7 +36,7 @@ function handle_tplink_WR841N(req, res) {
     res.setHeader('Content-Type','text/html');
     res.setHeader('WWW-Authenticate', 'Basic realm="TP-LINK Wireless N Router WR841N"');
     res.setHeader('Server', 'Router Webserver');
-    var content = fs.readFileSync('tplink.html', 'utf8');
+    var content = fs.readFileSync('pages/tplink.html', 'utf8');
     res.statusCode = 200;
     res.end(content);
     res.end();
@@ -49,21 +49,10 @@ function handle_WeMo_Link_Plug(req, res) {
     res.setHeader('Server', 'Unspecified, UPnP/1.0, Unspecified');
     res.setHeader('X-User-Agent', 'redsonic');
     res.statusCode = 200;
-    var content = fs.readFileSync('wemo.xml', 'utf8');
+    var content = fs.readFileSync('pages/wemo.xml', 'utf8');
     res.end(content);
 }
 
-
-function handle_Alegro_Web_Server(req, res) {
-    // PORT 8090
-    res.setHeader('Content-Type','text/html');
-    res.setHeader('Transfer-Encoding','chunked');
-    res.setHeader('Server', 'Allegro-Software-RomPager/5.40b1');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.statusCode = 200;
-    res.end();
-}
 
 function handle_router_SDT_CS3B1(req, res) {
     // PORT 8081, 8082, 8083
@@ -74,7 +63,7 @@ function handle_router_SDT_CS3B1(req, res) {
     res.setHeader('Date','Fri, 13 Jul 2018 15:54:54 GMT');
     res.setHeader('Server', 'lighttpd/1.4.20');
 
-    var content = fs.readFileSync('sdt-cs3b1.html', 'utf8');
+    var content = fs.readFileSync('pages/sdt-cs3b1.html', 'utf8');
     res.end(content);
 }
 
